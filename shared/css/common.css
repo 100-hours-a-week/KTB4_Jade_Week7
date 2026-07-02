@@ -1,0 +1,286 @@
+/* =========================================================
+   공통 스타일 (common.css)
+   로그인·회원가입 두 페이지가 함께 사용
+   ========================================================= */
+
+/* ---- 0. 기초 변수 & reset ---- */
+:root {
+  --color-bg: #f4f4f6;
+  --color-surface: #ffffff;
+  --color-text: #222222;
+  --color-text-sub: #888888;
+  --color-border: #d0d0d5;
+  --color-primary: #aca0e8;
+  --color-primary-strong: #7c6fd6;
+  --color-error: #e74c3c;
+  --radius: 8px;
+  --gap: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* ---- 1. 공통 헤더 ---- */
+.app-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  padding: 0 24px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-text);
+}
+
+.app-header__title {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.app-header__back {
+  position: absolute;
+  left: 40%;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--color-text);
+  padding: 4px 12px;
+}
+
+/* ---- 2. 공통 레이아웃 (메인 + 카드) ---- */
+.auth-main {
+  display: flex;
+  justify-content: center;
+  padding: 80px 16px;
+}
+
+.auth-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card__title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* ---- 3. 공통 폼 / 입력 필드 묶음 ---- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field__label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.field__input {
+  height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--color-primary-strong);
+}
+
+/* 도움말 메시지: 기본 회색(안내), 오류 시 빨강 */
+.field__helper {
+  min-height: 18px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+.field__helper.is-error {
+  color: var(--color-error);
+}
+
+.field__input.is-invalid {
+  border-color: var(--color-error);
+}
+
+/* ---- 4. 폼 전체 오류 (필드에 속하지 않는 메시지) ---- */
+/* 로그인 401 "이메일 또는 비밀번호가 다릅니다" 등에 사용 */
+.form-error {
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--color-error);
+  text-align: center;
+}
+
+/* ---- 5. 공통 버튼 ---- */
+.btn-primary {
+  height: 48px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-surface);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-strong);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- 6. 공통 이동 링크 ---- */
+.link-text {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--color-text-sub);
+  text-decoration: none;
+}
+
+.link-text:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   로그인 이후 공통 헤더 (common.js 가 주입)
+   - 목록·상세·작성·수정·마이페이지에서 공유
+   - 로고 + 프로필 드롭다운, 상세·작성·수정은 뒤로가기 추가
+   - 위 로그인/회원가입 헤더(.app-header)와는 클래스가 달라 공존함
+   ========================================================= */
+
+.articles-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid #cfcfd4;
+}
+
+.articles-header__inner {
+  max-width: 592px;             /* 게시글 화면 본문 폭에 맞춤 */
+  margin: 0 auto;
+  padding: 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;           /* 뒤로가기·프로필을 양 끝에 절대배치하는 기준 */
+}
+
+.articles-header__logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* 뒤로가기 (상세·작성·수정에만 주입됨) */
+.app-header__back-nav {
+  position: absolute;
+  left: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* 프로필 메뉴 + 드롭다운 */
+.profile-menu {
+  position: absolute;
+  right: 0;
+}
+
+.articles-header__profile {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.articles-header__profile-image {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #d9d9de;    /* 이미지 로드 전 자리 표시 */
+  display: block;
+}
+
+.profile-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 160px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  list-style: none;
+  z-index: 50;
+}
+
+.profile-menu__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.profile-menu__item:hover {
+  background-color: var(--color-bg);
+}
+
+/* 드롭다운 등 hidden 요소 완전히 숨김 */
+[hidden] {
+  display: none !important;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+  .articles-header__inner {
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .profile-menu { right: 16px; }
+  .app-header__back-nav { left: 16px; }
+}
