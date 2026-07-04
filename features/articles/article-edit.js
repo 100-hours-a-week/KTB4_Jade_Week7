@@ -76,13 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 requestMessage.textContent = "게시글을 불러오지 못했습니다.";
                 return;
             }
-            const data = await response.json(); //실제 서버에서 전송한 값 읽어오는 방법
+            const data = await response.json(); 
 
             titleInput.value = data.title;
             contentInput.value = data.content;
             if (data.imageUrl) imageFileName.textContent = "기존 이미지 있음";
 
-            refreshSubmitState();   // 값이 찼으니 버튼 활성화 판단
+            refreshSubmitState();
         } catch (error) {
             console.error(error);
             requestMessage.hidden = false;
@@ -165,5 +165,5 @@ document.addEventListener("DOMContentLoaded", () => {
         requestMessage.textContent = (data && data.message) || "게시글 수정에 실패했습니다.";
     };
 
-    loadArticle();  // 진입 시 기존 글 로드
+    loadArticle();  
 });
