@@ -1,0 +1,51 @@
+/* =========================================================
+   회원가입 전용 스타일 (signup.css)
+   프로필 사진 선택 영역 — 로그인에는 없는 요소
+   ========================================================= */
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 라벨과 도움말은 왼쪽 정렬, 업로더 원은 가운데 */
+.profile-field .field__label {
+  align-self: flex-start;
+}
+
+.profile-field .field__helper {
+  align-self: flex-start;
+}
+
+/* 원형 업로더 (label이 클릭 영역) */
+.profile-uploader {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background-color: #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;          /* 미리보기 이미지가 원 밖으로 안 나가게 */
+}
+
+/* 가운데 + 아이콘 (사진 선택 전 placeholder) */
+.profile-uploader__placeholder {
+  font-size: 40px;
+  color: #666666;
+}
+
+/* 실제 file input은 숨김 (label 클릭으로 대체) */
+.profile-uploader__input {
+  display: none;
+}
+
+/* JS가 사진 선택 완료 시 붙일 상태 클래스 */
+.profile-uploader.has-image .profile-uploader__placeholder {
+  display: none;
+}

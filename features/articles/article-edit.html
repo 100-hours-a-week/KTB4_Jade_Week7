@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>아무 말 대잔치 - 게시글 수정</title>
+  <link rel="stylesheet" href="./articles.css" />
+  <link rel="stylesheet" href="/shared/css/common.css" />
+</head>
+
+<body class="articles-page">
+
+  <!-- 공통 헤더는 common.js 가 이 자리에 주입한다 (뒤로가기 있음) -->
+  <div id="app-header" data-back="true"></div>
+
+  <!-- 게시글 수정 폼 (작성 화면과 클래스 공유) -->
+  <main class="article-create-main">
+    <h1 class="article-create-title">게시글 수정</h1>
+
+    <p class="article-create-request-message" id="requestMessage" role="alert" hidden></p>
+
+    <form class="article-create-form" id="editForm" novalidate>
+
+      <!-- 제목 (JS 가 기존 값을 채운다) -->
+      <div class="article-form-field" id="titleField">
+        <label class="article-form-label" for="titleInput">제목*</label>
+        <input
+          type="text"
+          class="article-form-input"
+          id="titleInput"
+          name="title"
+          placeholder="제목을 입력해주세요. (최대 26글자)"
+          maxlength="26"
+          autocomplete="off"
+        />
+        <p class="article-form-message" id="titleMessage"></p>
+      </div>
+
+      <!-- 내용 (JS 가 기존 값을 채운다) -->
+      <div class="article-form-field" id="contentField">
+        <label class="article-form-label" for="contentInput">내용*</label>
+        <textarea
+          class="article-form-input article-form-textarea"
+          id="contentInput"
+          name="content"
+          placeholder="내용을 입력해주세요."
+          rows="8"
+        ></textarea>
+        <p class="article-form-message" id="contentMessage">* helper text</p>
+      </div>
+
+      <!-- 이미지 (업로드 API 없음 → 파일명 표시까지만) -->
+      <div class="article-image-field" id="imageField">
+        <label class="article-form-label" for="imageInput">이미지</label>
+        <div class="article-image-field__row">
+          <input type="file" class="article-image-field__input" id="imageInput" accept="image/*" />
+          <label class="article-image-field__button" for="imageInput">파일 선택</label>
+          <span class="article-image-field__name" id="imageFileName">기존 파일 명</span>
+        </div>
+        <p class="article-form-message" id="imageMessage"></p>
+      </div>
+
+      <!-- 수정하기 버튼: 제목·내용 유효할 때만 활성 -->
+      <button type="submit" class="article-submit-button" id="submitButton" disabled>수정하기</button>
+    </form>
+  </main>
+
+  <script src="/features/common.js" defer></script>
+  <script src="./article-edit.js" defer></script>
+</body>
+</html>

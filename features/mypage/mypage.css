@@ -1,0 +1,110 @@
+/* ============================================================
+   mypage.css — "내 정보" 도메인 스타일 (회원정보수정 / 비밀번호수정)
+   - 헤더·프로필 드롭다운은 common.css 가 전담하므로 여기서 제거함
+   - 이 파일은 마이페이지 "본문"(폼 / 프로필사진 / 모달)만 담당
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg: #f4f4f6;
+  --color-surface: #ffffff;
+  --color-text: #1f2024;
+  --color-text-sub: #6b6b72;
+  --color-border: #e5e5ea;
+  --color-primary: #7c78f0;
+  --color-primary-hover: #6a66e0;
+  --color-error: #d64545;
+  --content-width: 400px;
+  --radius: 16px;
+}
+
+body.mypage-page {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  line-height: 1.5;
+}
+
+[hidden] { display: none !important; }
+
+/* ===== 회원정보수정 / 비밀번호수정 폼 ===== */
+.member-edit-main { max-width: var(--content-width); margin: 0 auto; padding: 40px 0 80px; }
+.member-edit-title { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 32px; }
+.member-edit-form { display: flex; flex-direction: column; gap: 20px; }
+.member-form-label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 8px; }
+
+/* 프로필 사진 */
+.member-profile-field { text-align: center; margin-bottom: 8px; }
+.member-profile-field__image-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto; }
+.member-profile-field__image {
+  display: block; width: 110px; height: 110px; border-radius: 50%;
+  background-color: #d9d9de; background-size: cover; background-position: center;
+}
+.member-profile-field__input { display: none; }
+.member-profile-field__change {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background-color: rgba(60,60,70,0.75); color: #fff; font-size: 12px;
+  padding: 6px 12px; border-radius: 14px; cursor: pointer;
+}
+
+/* 텍스트 필드 */
+.member-form-field { display: flex; flex-direction: column; }
+.member-form-static { font-size: 15px; color: var(--color-text); padding: 4px 0; }
+.member-form-input {
+  width: 100%; border: none; border-bottom: 1px solid var(--color-border);
+  padding: 8px 2px; font: inherit; font-size: 15px; color: var(--color-text);
+  background: transparent; outline: none; transition: border-color 0.15s ease;
+}
+.member-form-input:focus { border-bottom-color: var(--color-primary); }
+.member-form-input::placeholder { color: var(--color-text-sub); }
+.member-form-message { font-size: 12px; color: var(--color-text-sub); min-height: 16px; margin-top: 6px; }
+.member-form-field--invalid .member-form-input { border-bottom-color: var(--color-error); }
+.member-form-field--invalid .member-form-message { color: var(--color-error); }
+
+/* 수정하기 버튼 */
+.member-submit-button {
+  width: 100%; background-color: var(--color-primary); color: #fff; border: none;
+  border-radius: 8px; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.member-submit-button:hover { background-color: var(--color-primary-hover); }
+.member-submit-button:disabled { background-color: #c9c8e8; cursor: not-allowed; }
+
+/* 회원 탈퇴 (약한 텍스트 버튼) */
+.member-withdraw-button {
+  border: none; background: none; color: var(--color-text-sub);
+  font-size: 13px; cursor: pointer; padding: 4px; text-decoration: underline;
+}
+
+.member-edit-request-message { text-align: center; font-size: 13px; color: var(--color-error); margin-bottom: 8px; }
+
+/* ===== 앱 공통 모달 ===== */
+.app-modal {
+  position: fixed; inset: 0; display: none;
+  align-items: center; justify-content: center; padding: 20px; z-index: 100;
+}
+.app-modal--open { display: flex; }
+.app-modal__overlay { position: absolute; inset: 0; background-color: rgba(0,0,0,0.45); }
+.app-modal__dialog {
+  position: relative; background-color: var(--color-surface); border-radius: var(--radius);
+  padding: 32px 28px 24px; width: 100%; max-width: 360px; text-align: center;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+.app-modal__title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.app-modal__description { font-size: 14px; color: var(--color-text-sub); margin-bottom: 24px; }
+.app-modal__actions { display: flex; justify-content: center; gap: 12px; }
+.app-modal__button--cancel {
+  background-color: #1f2024; color: #fff; border: none; border-radius: 8px;
+  padding: 10px 26px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.app-modal__button--confirm {
+  background-color: var(--color-primary); color: #fff; border: none; border-radius: 8px;
+  padding: 10px 26px; font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.app-modal__button--confirm:hover { background-color: var(--color-primary-hover); }
+
+@media (max-width: 480px) {
+  .member-edit-main { max-width: 100%; padding-left: 20px; padding-right: 20px; }
+}
