@@ -28,13 +28,11 @@ const articleDeleteConfirmButton = document.getElementById("articleDeleteConfirm
 const commentDeleteModal = document.getElementById("commentDeleteModal");
 const commentDeleteConfirmButton = document.getElementById("commentDeleteConfirmButton");
 
-// 주소에서 게시글 uuid / 내 uuid 읽기
 const params = new URLSearchParams(window.location.search);
 const articleUuid = params.get("uuid");
 const myUuid = localStorage.getItem("userUuid");
 console.log("게시글 uuid:", articleUuid);
 
-//공통 유틸
 const formatDate = (isoString) => {
     const date = new Date(isoString);
     if (isNaN(date)) return isoString;
@@ -43,7 +41,6 @@ const formatDate = (isoString) => {
         + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };
 
-// 실패 상태코드를 공통으로 다룬다 (true 를 리턴하면 "처리했음")
 const handleAuthError = (status) => {
     if (status === 401) {
         window.location.href = "../auth/login.html";
@@ -52,11 +49,9 @@ const handleAuthError = (status) => {
     return false;
 };
 
-// 모달 여닫기 (게시글/댓글 공용)
 const openModal = (modal) => modal.classList.add("article-modal--open");
 const closeModal = (modal) => modal.classList.remove("article-modal--open");
 
-// 게시글 본문 채우기
 const renderArticle = (article) => {
     articleTitle.textContent = article.title;
     articleAuthorName.textContent = article.writer;
@@ -80,7 +75,6 @@ const renderArticle = (article) => {
     likeButton.dataset.liked = article.isLiked ? "true" : "false";
     likeButton.setAttribute("aria-pressed", article.isLiked ? "true" : "false");
 
-    // 내 글이면 수정/삭제 버튼 노출
     articleOwnerActions.hidden = article.userUuid !== myUuid;
 };
 
@@ -119,7 +113,6 @@ const createCommentItem = (comment) => {
     li.querySelector(".article-comment-item__body").textContent = comment.content;
     li.querySelector(".article-comment-item__edit-input").value = comment.content;
 
-    // 내 댓글이면 수정/삭제 버튼 노출
     if (comment.userUuid === myUuid) {
         li.querySelector(".article-comment-item__actions").hidden = false;
     }
@@ -127,14 +120,12 @@ const createCommentItem = (comment) => {
     return li;
 };
 
-// 댓글 목록 그리기
 const renderComments = (comments) => {
     commentList.innerHTML = "";
     comments.forEach((c) => commentList.appendChild(createCommentItem(c)));
     commentEmptyMessage.hidden = comments.length > 0;
 };
 
-// 상세 조회 — 페이지 진입 + 변경 후 재조회에 재사용
 const loadArticleDetail = async () => {
     if (!articleUuid) {
         articleErrorMessage.hidden = false;
@@ -160,7 +151,6 @@ const loadArticleDetail = async () => {
     }
 };
 
-// 좋아요 추가/취소
 likeButton.addEventListener("click", async () => {
     const liked = likeButton.dataset.liked === "true";
     const method = liked ? "DELETE" : "POST";
@@ -174,7 +164,6 @@ likeButton.addEventListener("click", async () => {
             return;
         }
 
-        // 서버가 준 최종값으로 화면을 맞춘다 (직접 계산 X)
         const data = await response.json();
         likeCount.textContent = data.likeCount;
         likeButton.dataset.liked = data.isLiked ? "true" : "false";
@@ -184,18 +173,15 @@ likeButton.addEventListener("click", async () => {
     }
 });
 
-// 게시물 수정
 articleEditButton.addEventListener("click", () => {
     window.location.href = "article-edit.html?uuid=" + articleUuid;
 });
 
-// 게시글 삭제
 articleDeleteButton.addEventListener("click", () => openModal(articleDeleteModal));
 articleDeleteModal.addEventListener("click", (event) => {
     if (event.target.hasAttribute("data-modal-close")) closeModal(articleDeleteModal);
 });
 
-// 게시글 삭제 확인 -> 성공 시 목록으로 리다이렉트
 articleDeleteConfirmButton.addEventListener("click", async () => {
     try {
         const response = await apiFetch("articles/" + articleUuid, { method: "DELETE" });
@@ -257,14 +243,12 @@ commentList.addEventListener("click", async (event) => {
     if (!li) return;
     const commentUuid = li.dataset.commentId;
 
-    // 삭제: 모달 열기
     if (action === "comment-delete") {
         commentDeleteModal.dataset.commentId = commentUuid;
         openModal(commentDeleteModal);
         return;
     }
 
-    // 수정 시작
     if (action === "comment-edit") {
         const editing = commentList.querySelector(".article-comment-item--editing");
         if (editing && editing !== li) cancelEdit(editing);
@@ -279,7 +263,6 @@ commentList.addEventListener("click", async (event) => {
         return;
     }
 
-    // 수정 완료
     if (action === "comment-edit-save") {
         const input = li.querySelector(".article-comment-item__edit-input");
         const next = input.value.trim();
@@ -309,7 +292,6 @@ commentList.addEventListener("click", async (event) => {
         return;
     }
 
-    // 수정 취소
     if (action === "comment-edit-cancel") {
         cancelEdit(li);
         return;
@@ -322,12 +304,10 @@ const cancelEdit = (li) => {
     li.classList.remove("article-comment-item--editing");
 };
 
-// 댓글 삭제 모달
 commentDeleteModal.addEventListener("click", (event) => {
     if (event.target.hasAttribute("data-modal-close")) closeModal(commentDeleteModal);
 });
 
-// 댓글 삭제 확인 -> 성공 시 재조회
 commentDeleteConfirmButton.addEventListener("click", async () => {
     const commentUuid = commentDeleteModal.dataset.commentId;
 
@@ -345,7 +325,7 @@ commentDeleteConfirmButton.addEventListener("click", async () => {
         }
 
         closeModal(commentDeleteModal);
-        await loadArticleDetail();   // 서버 기준으로 목록 + 댓글 수 갱신
+        await loadArticleDetail();  
     } catch (error) {
         console.error(error);
         closeModal(commentDeleteModal);

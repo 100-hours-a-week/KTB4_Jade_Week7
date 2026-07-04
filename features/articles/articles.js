@@ -168,25 +168,22 @@ const observer = new IntersectionObserver(async (entries) => {
     }
 });
 
-// 목록을 첫 페이지부터 다시 그린다 (최초 로드 + 뒤로가기 복원 공용)
 const reloadArticles = async () => {
-    // 무한스크롤 상태 리셋 (안 하면 이전 커서부터 이어붙어 중복됨)
     lastArticleUuid = null;
     hasNext = true;
     isLoading = false;
     articleList.innerHTML = "";
 
-    observer.unobserve(sentinel);   // 중복 감시 방지 위해 일단 끊고
+    observer.unobserve(sentinel);   
 
     showLoading();
     const success = await loadArticles();
 
     if (success && hasNext) {
-        observer.observe(sentinel); // 더 있으면 다시 감시 시작
+        observer.observe(sentinel); 
     }
 };
 
-// pageshow: 최초 로드(persisted=false)와 뒤로가기 복원(persisted=true) 모두 여기서 처리
 window.addEventListener("pageshow", async (event) => {
     const userUuid = localStorage.getItem("userUuid");
     if (!userUuid) {

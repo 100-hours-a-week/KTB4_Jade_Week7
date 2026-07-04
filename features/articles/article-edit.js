@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const articleUuid = params.get("uuid");
 
-    // 검증 / 버튼 상태
     const setFieldError = (field, messageEl, text) => {
         field.classList.add("article-form-field--invalid");
         messageEl.textContent = text;
@@ -61,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
             : "기존 파일 명";
     });
 
-    // 진입 시 기존 글 불러와 폼 채우기 
     const loadArticle = async () => {
         if (!articleUuid) {
             requestMessage.hidden = false;
@@ -90,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // 제출
     editForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -136,7 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 오류 응답 처리
     const handleErrorResponse = async (response) => {
         let data = null;
         try { data = await response.json(); } catch (_) {}

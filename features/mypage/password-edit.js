@@ -27,8 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         field.classList.remove("member-form-field--invalid");
         messageEl.textContent = "* helper text";
     };
-
-    // 8~20자 + 대문자·소문자·숫자·특수문자 각 1개 이상
+    
     const validatePassword = () => {
         const value = passwordInput.value;
         const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,20}$/;
@@ -70,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     passwordInput.addEventListener("input", () => {
         validatePassword();
-        // 비밀번호가 바뀌면 확인란도 다시 검사
         if (checkPasswordInput.value.length > 0) validateCheckPassword();
         refreshSubmitState();
     });
