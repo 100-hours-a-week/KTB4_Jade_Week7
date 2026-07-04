@@ -4,7 +4,6 @@ const profilePreview = document.getElementById("profile-preview");
 const profileUploader = document.querySelector(".profile-uploader");
 const profileHelper = document.getElementById("profileImageUrl-helper");
 
-// file input은 input.value로 파일을 못 다루므로 선택한 파일을 따로 보관
 let profileFile = null;
 
 const validateProfile = () => {
@@ -19,7 +18,6 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-    // 8~20자 + 대문자·소문자·숫자·특수문자 각 1개 이상
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{8,20}$/;
     if (passwordPattern.test(password)) return "";
     return "8자 이상 20자 이하, 대문자·소문자·숫자·특수문자를 각각 1개 이상 포함해주세요.";
@@ -74,7 +72,6 @@ const handleProfileChange = (event) => {
 
     if (file) {
         profileFile = file;
-        // FileReader: 선택한 파일을 읽어 미리보기로 표시
         const reader = new FileReader();
         reader.onload = () => {
             profilePreview.style.backgroundImage = `url(${reader.result})`;
@@ -114,7 +111,6 @@ const handleNicknameInput = (event) => {
     updateSubmitButton();
 };
 
-// file은 input이 아니라 change 이벤트
 profileInput.addEventListener("change", handleProfileChange);
 emailInput.addEventListener("input", handleEmailInput);
 passwordInput.addEventListener("input", handlePasswordInput);

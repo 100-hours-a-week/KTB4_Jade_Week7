@@ -1,25 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 조회/표시
     const emailText = document.getElementById("emailText");
     const nicknameInput = document.getElementById("nicknameInput");
     const profilePreview = document.getElementById("profilePreview");
     const profileInput = document.getElementById("profileInput");
 
-    // 수정
     const editForm = document.getElementById("editForm");
     const submitButton = document.getElementById("submitButton");
     const nicknameField = document.getElementById("nicknameField");
     const nicknameMessage = document.getElementById("nicknameMessage");
     const requestMessage = document.getElementById("requestMessage");
 
-    // 탈퇴 모달
     const withdrawButton = document.getElementById("withdrawButton");
     const withdrawModal = document.getElementById("withdrawModal");
     const withdrawConfirmButton = document.getElementById("withdrawConfirmButton");
 
     const myUuid = localStorage.getItem("userUuid");
 
-    //공통 유틸
     const openModal = (modal) => modal.classList.add("app-modal--open");
     const closeModal = (modal) => modal.classList.remove("app-modal--open");
 
@@ -32,19 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
         nicknameMessage.textContent = "* helper text";
     };
 
-    // 로그아웃 처리: 401 응답 시에도 호출되므로 함수는 유지
     const logout = () => {
         localStorage.removeItem("userUuid");
         window.location.href = "../auth/login.html";
     };
 
-    // 프로필 이미지 URL 을 본문 미리보기에 반영 (헤더는 common.js 담당)
     const applyProfileImage = (url) => {
         if (!url) return;
         profilePreview.style.backgroundImage = `url("${url}")`;
     };
 
-    //내 정보 조회
     const loadMyInfo = async () => {
         try {
             const response = await apiFetch("me/basic-info");
@@ -68,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    //닉네임 검증
     const validateNickname = () => {
         const value = nicknameInput.value;
 
@@ -76,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setNicknameError("닉네임을 입력해주세요.");
             return false;
         }
-        if (/\s/.test(value)) {   // 공백 문자 포함 여부
+        if (/\s/.test(value)) {  
             setNicknameError("띄어쓰기 없이 입력해주세요.");
             return false;
         }
@@ -90,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nicknameInput.addEventListener("input", validateNickname);
 
-    // 프로필 사진 변경 (미리보기만, 업로드 API 는 이후)
     profileInput.addEventListener("change", () => {
         if (profileInput.files.length === 0) return;
         const file = profileInput.files[0];
@@ -99,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
         profilePreview.style.backgroundImage = `url("${previewUrl}")`;
     });
 
-    // 수정하기
     editForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
@@ -144,7 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 수정 오류 처리
     const handleEditError = async (response) => {
         let data = null;
         try { data = await response.json(); } catch (_) {}
@@ -181,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await apiFetch("me", { method: "DELETE" });
 
-            // 성공
             if (response.ok) {
                 localStorage.removeItem("userUuid");
                 window.location.href = "../auth/login.html";
