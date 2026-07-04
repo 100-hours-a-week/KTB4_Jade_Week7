@@ -1,10 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 헤더 드롭다운
-    const profileMenuButton = document.getElementById("profileMenuButton");
-    const profileDropdown = document.getElementById("profileDropdown");
-    const headerProfileImage = document.getElementById("headerProfileImage");
-    const logoutButton = document.getElementById("logoutButton");
-
     // 조회/표시
     const emailText = document.getElementById("emailText");
     const nicknameInput = document.getElementById("nicknameInput");
@@ -38,36 +32,17 @@ document.addEventListener("DOMContentLoaded", () => {
         nicknameMessage.textContent = "* helper text";
     };
 
-    // 로그아웃 처리: 로그인 정보 지우고 로그인 페이지로
+    // 로그아웃 처리: 401 응답 시에도 호출되므로 함수는 유지
     const logout = () => {
         localStorage.removeItem("userUuid");
         window.location.href = "../auth/login.html";
     };
 
-    // 프로필 이미지 URL 을 두 곳에 배경으로 반영
+    // 프로필 이미지 URL 을 본문 미리보기에 반영 (헤더는 common.js 담당)
     const applyProfileImage = (url) => {
         if (!url) return;
-        headerProfileImage.style.backgroundImage = `url("${url}")`;
         profilePreview.style.backgroundImage = `url("${url}")`;
     };
-
-   //헤더 드롭다운 열고 닫기
-    profileMenuButton.addEventListener("click", (event) => {
-        event.stopPropagation();   // 아래 document 클릭(닫기)로 전파되지 않게
-        const willOpen = profileDropdown.hidden;
-        profileDropdown.hidden = !willOpen;
-        profileMenuButton.setAttribute("aria-expanded", String(willOpen));
-    });
-
-    // 메뉴 밖을 클릭하면 닫기
-    document.addEventListener("click", (event) => {
-        if (!profileDropdown.hidden && !event.target.closest(".profile-menu")) {
-            profileDropdown.hidden = true;
-            profileMenuButton.setAttribute("aria-expanded", "false");
-        }
-    });
-
-    logoutButton.addEventListener("click", logout);
 
     //내 정보 조회
     const loadMyInfo = async () => {
@@ -82,9 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const data = await response.json();
-            emailText.textContent = data.email;         
-            nicknameInput.value = data.nickname;           
-            applyProfileImage(data.profileImageUrl);       
+            emailText.textContent = data.email;
+            nicknameInput.value = data.nickname;
+            applyProfileImage(data.profileImageUrl);
             clearNicknameError();
         } catch (error) {
             console.error(error);
@@ -115,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nicknameInput.addEventListener("input", validateNickname);
 
-    // 프로필 사진 변경
+    // 프로필 사진 변경 (미리보기만, 업로드 API 는 이후)
     profileInput.addEventListener("change", () => {
         if (profileInput.files.length === 0) return;
         const file = profileInput.files[0];
@@ -152,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 applyProfileImage(data.profileImageUrl);
                 requestMessage.hidden = false;
                 nicknameInput.value = data.nickname;
-                requestMessage.style.color = "#2e7d32";  
+                requestMessage.style.color = "#2e7d32";
                 requestMessage.textContent = "수정되었습니다.";
                 return;
             }
@@ -161,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error(error);
             requestMessage.hidden = false;
-            requestMessage.style.color = "";   
+            requestMessage.style.color = "";
             requestMessage.textContent = "네트워크 오류로 수정하지 못했습니다.";
         } finally {
             submitButton.disabled = false;
@@ -176,16 +151,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.status === 401) { logout(); return; }
 
-        if (response.status === 409) {  
+        if (response.status === 409) {
             setNicknameError((data && data.message) || "중복된 닉네임입니다.");
             return;
         }
-        if (response.status === 422) {   
+        if (response.status === 422) {
             const fields = (data && data.fields) || {};
             setNicknameError(fields.nickname || (data && data.message) || "닉네임 형식을 확인해주세요.");
             return;
         }
-        if (response.status === 400) {   
+        if (response.status === 400) {
             requestMessage.hidden = false;
             requestMessage.style.color = "";
             requestMessage.textContent = (data && data.message) || "변경할 내용을 입력해주세요.";
@@ -208,7 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 성공
             if (response.ok) {
-                // 탈퇴했으니 로그인 정보 제거 후 시작 페이지로
                 localStorage.removeItem("userUuid");
                 window.location.href = "../auth/login.html";
                 return;
@@ -228,6 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
             requestMessage.textContent = "네트워크 오류로 탈퇴하지 못했습니다.";
         }
     });
-    
+
     loadMyInfo();
 });

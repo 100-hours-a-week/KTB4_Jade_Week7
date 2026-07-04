@@ -32,7 +32,7 @@ const apiFetch = (path, options = {}) => {
 
 const buildHeaderHtml = (showBack) => {
     const backHtml = showBack
-        ? `<button type="button" class="app-header__back" id="backButton" aria-label="뒤로가기">&lt;</button>`
+        ? `<button type="button" class="app-header__back-nav" id="backButton" aria-label="뒤로가기">&lt;</button>`
         : "";
 
     return `
